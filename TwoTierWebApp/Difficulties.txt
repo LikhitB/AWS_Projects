@@ -1,0 +1,55 @@
+Users
+likhithero -> basic s3,ec2,elb,asg full access permisssions
+
+VPC
+-VPC CIDR Block -> 256ips i.e /24 = 1 range  (10.0.0.0/24)
+-subnets 
+ -privateSubnet1ForEpicReads (private) ->10.0.0.0/26
+  -it has range of 10.0.0.0 -> 10.0.0.63
+ -privateSubnetForEpicReads1 (private)   -> 10.0.0.0/26
+  -it has range of 10.0.0.64/26 -> 10.0.0.127/26
+ -privateSubnetForEpicReads2 (private)
+  -it has range of 10.0.0.128/26 -> 10.0.0.255/26 -> 10.0.0.128/26
+ -a rout table is associated, which has route to internet gateway on 0.0.0.0/0. so this subnet is officially public.
+ -a route table is not attached so the other subnet becomes private
+-security
+
+DB
+-login to and perform DB operations 
+ -mysql -h epicreadsdb.c7wqsskqayed.ap-south-1.rds.amazonaws.com -u admin -p  -> you can find rds-endpoint in the RDS instance.
+
+
+
+
+publicSubnet2 -> 10.0.1.0/26
+
+
+
+
+
+
+
+
+
+Difficulties
+
+- DB was not created until the VPC has multiAZ subnets it asks for multiAZ
+- RDS DB has its own subnet groups because RDS doesn't sit on one subnet so create a group with private Subnets.
+- cannot find installation page 
+  - root cause php cannot intaract with the database(sudo dnf/yum install php-mysqlnd) and we didn't define the plugin definr('wp_config_database',true)
+-after the setup of load balancer I didn't get my website
+ -solved by editing the user-data in the launch templte (didn't install httpd).
+
+notes:
+1.instances in the ASG don't have publicIpv4
+Commands used 
+
+-sudo yum install php-xml -y
+-sudo cp -r 
+-sudo systemctl restart httpd.service
+-sudo systemctl restart/start/status php-fpm
+-sudo wget https://wordpress.org/latest.tar.gz
+-sudo tar -xzvf latest.tat.gz
+-sudo enable --how php-fpm
+  
+
